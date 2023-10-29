@@ -136,48 +136,48 @@ enum InputMouseAnalogue : uint32 {
 
 
 struct InputDevice {
-//     InputDeviceType type;
+     InputDeviceType type;
 
-//     int32 discreteCount;
-    
-//     int32 *framesHeld;
-//     bool *released;
-//     bool *pressed;
-//     real32 *timePressed;
+     int32 discreteCount;
 
-//     int32 analogueCount;
-    
-//     real32 *prevAnalogue;
-//     real32 *analogue;
+     int32 *framesHeld;
+     bool *released;
+     bool *pressed;
+     real32 *timePressed;
+
+     int32 analogueCount;
+
+     real32 *prevAnalogue;
+     real32 *analogue;
  };
 
 struct InputEvent {
-//     InputDevice *device;
-//     int32 index;
-//     bool discreteValue;
-//     real32 value;
+     InputDevice *device;
+     int32 index;
+     bool discreteValue;
+     real32 value;
 };
 
 
 struct InputManager {
-//     uint32 capacity;
-//     uint32 count;
-//     uint32 size;
+     uint32 capacity;
+     uint32 count;
+     uint32 size;
 
-//     DynamicArray<InputEvent> events;
+     DynamicArray<InputEvent> events;
 
-//     int32 deviceCount;
-//     InputDevice *devices;
+     int32 deviceCount;
+     InputDevice *devices;
 
-//     uint32 charSize;
-//     uint32 charCount;
-//     char *inputChars;
+     uint32 charSize;
+     uint32 charCount;
+     char *inputChars;
 
-//     vec2i mousePos;
-//     vec2 mousePosNorm;
-//     vec2 mousePosNormSigned;
+     vec2i mousePos;
+     vec2 mousePosNorm;
+     vec2 mousePosNormSigned;
 
-//     int32 mouseScroll;
+     int32 mouseScroll;
 
 #if !_WIN32
     sem_t *semaphore;

@@ -13,8 +13,8 @@
 #define SQRT2 1.41421356237f
 
 #include "math/scalar.h"
-//#include "math/vector.h"
-//#include "math/quaternion.h"
+#include "math/vector.h"
+#include "math/quaternion.h"
 //#include "math/matrix.h"
 #include "math/rand.h"
 //#include "math/geometry.h"

@@ -52,7 +52,7 @@ WindowsPlatform *Platform = NULL;
 
 #include "game.cpp"
 
-//#include "windows_input.cpp"
+#include "windows_input.cpp"
 
 
 
@@ -380,19 +380,19 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmndL
     plat.screenWidth = gameMem->screenWidth;
     plat.screenHeight = gameMem->screenHeight;
 
-    //bool gotConfigFile = ReadConfigFile("config.m_txt");
+    bool gotConfigFile = ReadConfigFile("config.m_txt");
     
         Game->screenWidth = 800;
         Game->screenHeight = 450;
-    // if (!gotConfigFile) {
-    //    // Game->screenWidth = 500;
-    //    // Game->screenHeight = 900;
+    if (!gotConfigFile) {
+       // Game->screenWidth = 500;
+       // Game->screenHeight = 900;
 
-    //     Game->audioPlayer.volume = 1.0f;
-    //     Game->networkInfo.serverIPString = "192.0.0.1"; // @NOTE: this is just the IP address referring to yourself
+        Game->audioPlayer.volume = 1.0f;
+        Game->networkInfo.serverIPString = "192.0.0.1"; // @NOTE: this is just the IP address referring to yourself
 
-    //     // @TODO: write out a config file if there isnt one already
-    // }
+        // @TODO: write out a config file if there isnt one already
+    }
 
     WNDCLASS windowClass;
     memset(&windowClass, 0, sizeof(WNDCLASS));
@@ -475,12 +475,12 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmndL
     gameMem->running = true;
 
     InputManager *inputManager = &gameMem->inputManager;
-    //AllocateInputManager(inputManager, &gameMem->permanentArena, 32, 4);
-    //gameMem->keyboard = &inputManager->devices[0];
-    //gameMem->mouse = &inputManager->devices[1];
+    AllocateInputManager(inputManager, &gameMem->permanentArena, 32, 4);
+    gameMem->keyboard = &inputManager->devices[0];
+    gameMem->mouse = &inputManager->devices[1];
 
-    //AllocateInputDevice(gameMem->keyboard, InputDeviceType_Keyboard, Input_KeyboardDiscreteCount, 0);
-    //AllocateInputDevice(gameMem->mouse, InputDeviceType_Mouse, Input_MouseDiscreteCount, Input_MouseAnalogueCount);
+    AllocateInputDevice(gameMem->keyboard, InputDeviceType_Keyboard, Input_KeyboardDiscreteCount, 0);
+    AllocateInputDevice(gameMem->mouse, InputDeviceType_Mouse, Input_MouseDiscreteCount, Input_MouseAnalogueCount);
 
     Keyboard = gameMem->keyboard;
     Mouse = gameMem->mouse;
@@ -508,43 +508,43 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmndL
     real64 timeSinceRender = 0.0;
 
     HCURSOR cursor = LoadCursor(NULL, IDC_ARROW);
-    //SetCursor(cursor);
-    //ShowCursor(false);
-   // WinMoveMouse(window, Game->screenWidth / 2.0f, Game->screenHeight / 2.0f, Game->screenHeight);
+    SetCursor(cursor);
+    ShowCursor(false);
+    WinMoveMouse(window, Game->screenWidth / 2.0f, Game->screenHeight / 2.0f, Game->screenHeight);
 
     
     gameMem->systemTime = (real32)systemTime.QuadPart;
 
     while(gameMem->running && PlatformRunning) {
 
-        // LARGE_INTEGER prevSystemTime = systemTime;
-        // int32 error = QueryPerformanceCounter(&systemTime);
+         LARGE_INTEGER prevSystemTime = systemTime;
+         int32 error = QueryPerformanceCounter(&systemTime);
 
-        // gameMem->deltaTime = ((real64)systemTime.QuadPart - (real64)prevSystemTime.QuadPart) / (real64)systemFrequency.QuadPart;
+         gameMem->deltaTime = ((real64)systemTime.QuadPart - (real64)prevSystemTime.QuadPart) / (real64)systemFrequency.QuadPart;
 
-        // gameMem->time += gameMem->deltaTime;
+         gameMem->time += gameMem->deltaTime;
 
-        // Time = gameMem->time;
-        // DeltaTime = gameMem->deltaTime;
+         Time = gameMem->time;
+         DeltaTime = gameMem->deltaTime;
 
-        // timeSinceRender += gameMem->deltaTime;
+         timeSinceRender += gameMem->deltaTime;
 
-        // ClearInputManager(inputManager);
-        // WindowsGetInput(inputManager);
+         ClearInputManager(inputManager);
+         WindowsGetInput(inputManager);
 
         // @TODO: use an actual accumulator
-        //if (timeSinceRender < FRAME_RATE) {
-        //    real64 timeUntilRender = FRAME_RATE - timeSinceRender;
-        //    //Sleep(timeUntilRender * 1000);
-        //}
+        if (timeSinceRender < FRAME_RATE) {
+            real64 timeUntilRender = FRAME_RATE - timeSinceRender;
+            //Sleep(timeUntilRender * 1000);
+        }
 
 #if OPENGL
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 #endif
 
-        //GameUpdateAndRender(gameMem);
+        GameUpdateAndRender(gameMem);
 
-        //SwapBuffers(hdc);
+        SwapBuffers(hdc);
     }
 
     GameDeinit();
