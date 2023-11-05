@@ -4,6 +4,10 @@
 
 #include "log.cpp"
 
+#include "render.cpp"
+#include "render_opengl.cpp"
+
+#include "mesh.cpp"
 
 #include "game_code.cpp"
 
@@ -195,8 +199,31 @@ void GameInit(GameMemory *gameMem) {
     Game->log.head->next = NULL;
 
     Camera *cam = &gameMem->camera;
+    cam->size = 1;
+    cam->type = CameraType_Orthographic;
+    cam->width = 16;
+    cam->height = 9;
+    cam->projection = Orthographic(cam->width * -0.5f * cam->size, cam->width * 0.5f * cam->size,
+                                   cam->height * -0.5f * cam->size, cam->height * 0.5f * cam->size,
+                                   0.0, 100.0f);
 
+    UpdateCamera(cam, gameMem->cameraPosition, gameMem->cameraRotation);
+    // Init Graphics
+    AllocateQuad(&gameMem->quad);
+    InitMesh(&gameMem->quad);
 
+    AllocateRectBuffer(256 * 256, &Game->rectBuffer);
+    printf("hi");
+#if WINDOWS
+    {
+        LoadShader("shaders/instanced_quad_shader.vert", "shaders/instanced_quad_shader.frag", &gameMem->instancedQuadShader);
+        const char *uniforms[] = {
+                "viewProjection",
+        };
+        CompileShader(&gameMem->instancedQuadShader, 1, uniforms);
+    }
+#endif
+    //InitGlyphBuffers(GlyphBufferCount);
 }
 
 void GameDeinit() {
@@ -225,23 +252,35 @@ void GameUpdateAndRender(GameMemory *gameMem) {
 
     if (!Game->paused || Game->steppingFrame) {
         MyGameUpdate();
+        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.6f, 0.5f, 0.2f, 1.0f);
+//        glClearColor(Mosaic->screenColor.r, Mosaic->screenColor.g, Mosaic->screenColor.b, 1.0f);
+
+        //Mosaic->rectBuffer.count = 0;
+        {
+           // vec2 pos = 0.0f + V2(16.0f * 0.5f, -16.0f * 0.5f);
+            DrawRect(pos, 16.0f * 0.5f, V4(0, 0, 0, 1));
+        }
     }
 
     Camera *cam = &gameMem->camera;
-    //UpdateCamera(&gameMem->camera, gameMem->cameraPosition, gameMem->cameraRotation);
+    UpdateCamera(&gameMem->camera, gameMem->cameraPosition, gameMem->cameraRotation);
 
     Game->steppingFrame = false;
-
-  //  RenderRectBuffer(&Game->rectBuffer);
-    //Game->rectBuffer.count = 0;
+    RenderRectBuffer(&Game->rectBuffer);
+    Game->rectBuffer.count = 0;
 
  //   DrawGlyphs(gameMem->glyphBuffers);
 
     //DeleteEntities(&Game->entityDB);
 
+
     Game->fps = (real32)Game->frame / (Game->time - Game->startTime);
+    printf("fps: %f\n", Game->fps);
 
     gameMem->frame++;
+//    printf("frame: %f\n", Game->frame);
+
     ClearMemoryArena(&Game->frameMem);
 
     ClearInputManager(input);

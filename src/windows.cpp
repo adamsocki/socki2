@@ -152,15 +152,15 @@ void InitOpenGL(HWND window, OpenGLInfo *glInfo) {
 
         {
             glInfo->vendor = glGetString(GL_VENDOR);
-            //glCheckError();
+            glCheckError();
             glInfo->renderer = glGetString(GL_RENDERER);
-            //glCheckError();
+            glCheckError();
             glInfo->version = glGetString(GL_VERSION);
-            //glCheckError();
+            glCheckError();
             glInfo->shadingLanguageVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
-            //glCheckError();
+            glCheckError();
             glInfo->extensions = glGetString(GL_EXTENSIONS);
-            //glCheckError();
+            glCheckError();
 
             Print("%s", glInfo->vendor);
             Print("%s", glInfo->renderer);
@@ -381,9 +381,9 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmndL
     plat.screenHeight = gameMem->screenHeight;
 
     bool gotConfigFile = ReadConfigFile("config.m_txt");
-    
-        Game->screenWidth = 800;
-        Game->screenHeight = 450;
+    Game->screenWidth = 800;
+
+    Game->screenHeight = 450;
     if (!gotConfigFile) {
        // Game->screenWidth = 500;
        // Game->screenHeight = 900;
@@ -512,7 +512,15 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmndL
     ShowCursor(false);
     WinMoveMouse(window, Game->screenWidth / 2.0f, Game->screenHeight / 2.0f, Game->screenHeight);
 
-    
+    // TO TURN OFF V-SYNC
+    wglSwapIntervalEXT(0);
+
+    // TO HAVE DEBUG CONSOLE
+    if (AllocConsole()) {
+        freopen("CONOUT$", "w", stdout);
+    }
+
+
     gameMem->systemTime = (real32)systemTime.QuadPart;
 
     while(gameMem->running && PlatformRunning) {
@@ -533,10 +541,10 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmndL
          WindowsGetInput(inputManager);
 
         // @TODO: use an actual accumulator
-        if (timeSinceRender < FRAME_RATE) {
-            real64 timeUntilRender = FRAME_RATE - timeSinceRender;
+       // if (timeSinceRender < FRAME_RATE) {
+       //     real64 timeUntilRender = FRAME_RATE - timeSinceRender;
             //Sleep(timeUntilRender * 1000);
-        }
+        //}
 
 #if OPENGL
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -545,6 +553,8 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmndL
         GameUpdateAndRender(gameMem);
 
         SwapBuffers(hdc);
+
+
     }
 
     GameDeinit();

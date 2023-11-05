@@ -60,9 +60,9 @@ void WriteLogToFile(char *path) {
             LogData l = log->logs[i];
 
             if (l.frame > frame) {
-                fprintf(file, "\n================\n");
-                fprintf(file, "FRAME %d\n", l.frame);
-                fprintf(file, "================\n\n");
+                //fprintf(file, "\n================\n");
+                //fprintf(file, "FRAME %d\n", l.frame);
+                //fprintf(file, "================\n\n");
                 frame = l.frame;
             }
 

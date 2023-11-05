@@ -7,12 +7,14 @@
 #include "log.h"
 
 #include "math/math.h"
+#include "render.h"
+
+
 #include "audio.h"
 #include "network.h"
 
-
+#include "mesh.h"
 #include "camera.h"
-#include "render.h"
 
 #include "input.h"
 
@@ -20,6 +22,9 @@
 
 
 #define FRAME_RATE 1 / HERTZ
+
+
+#define GlyphBufferCount 64
 
 struct GameMemory
 {
@@ -65,7 +70,10 @@ struct GameMemory
     vec3 cameraPosition;
     quaternion cameraRotation;
 
-//    RectBuffer rectBuffer;
+    RectBuffer rectBuffer;
+
+    Shader instancedQuadShader;
+    Mesh quad;
 };
 
 real32 Time = 0;

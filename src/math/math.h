@@ -15,9 +15,9 @@
 #include "math/scalar.h"
 #include "math/vector.h"
 #include "math/quaternion.h"
-//#include "math/matrix.h"
+#include "math/matrix.h"
 #include "math/rand.h"
-//#include "math/geometry.h"
+#include "math/geometry.h"
 
 #include "math/color.h"
 
