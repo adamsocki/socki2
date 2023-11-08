@@ -259,7 +259,7 @@ void GameUpdateAndRender(GameMemory *gameMem) {
         //Mosaic->rectBuffer.count = 0;
         {
            // vec2 pos = 0.0f + V2(16.0f * 0.5f, -16.0f * 0.5f);
-            DrawRect(pos, 16.0f * 0.5f, V4(0, 0, 0, 1));
+            //DrawRect(pos, 16.0f * 0.5f, V4(0, 0, 0, 1));
         }
     }
 
@@ -267,8 +267,8 @@ void GameUpdateAndRender(GameMemory *gameMem) {
     UpdateCamera(&gameMem->camera, gameMem->cameraPosition, gameMem->cameraRotation);
 
     Game->steppingFrame = false;
-    RenderRectBuffer(&Game->rectBuffer);
-    Game->rectBuffer.count = 0;
+    //RenderRectBuffer(&Game->rectBuffer);
+    //Game->rectBuffer.count = 0;
 
  //   DrawGlyphs(gameMem->glyphBuffers);
 
